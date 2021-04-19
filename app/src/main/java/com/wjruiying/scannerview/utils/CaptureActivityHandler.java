@@ -28,6 +28,13 @@ import com.wjruiying.scannerview.activity.CaptureActivity;
 import com.wjruiying.scannerview.camera.CameraManager;
 import com.wjruiying.scannerview.decode.DecodeThread;
 
+import static com.wjruiying.scannerview.Constant.DECODE;
+import static com.wjruiying.scannerview.Constant.DECODE_FAILED;
+import static com.wjruiying.scannerview.Constant.DECODE_SUCCEEDED;
+import static com.wjruiying.scannerview.Constant.QUIT;
+import static com.wjruiying.scannerview.Constant.RESTART_PREVIEW;
+import static com.wjruiying.scannerview.Constant.RETURN_SCAN_RESULT;
+
 /**
  * This class handles all the messaging which comprises the state machine for
  * capture.
@@ -60,22 +67,22 @@ public class CaptureActivityHandler extends Handler {
 	@Override
 	public void handleMessage(Message message) {
 		switch (message.what) {
-		case R.id.restart_preview:
+		case RESTART_PREVIEW:
 			restartPreviewAndDecode();
 			break;
-		case R.id.decode_succeeded:
+		case DECODE_SUCCEEDED:
 			state = State.SUCCESS;
 			Bundle bundle = message.getData();
 
 			activity.handleDecode((Result) message.obj, bundle);
 			break;
-		case R.id.decode_failed:
+		case DECODE_FAILED:
 			// We're decoding as fast as possible, so when one decode fails,
 			// start another.
 			state = State.PREVIEW;
-			cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+			cameraManager.requestPreviewFrame(decodeThread.getHandler(), DECODE);
 			break;
-		case R.id.return_scan_result:
+		case RETURN_SCAN_RESULT:
 			activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
 			activity.finish();
 			break;
@@ -85,7 +92,7 @@ public class CaptureActivityHandler extends Handler {
 	public void quitSynchronously() {
 		state = State.DONE;
 		cameraManager.stopPreview();
-		Message quit = Message.obtain(decodeThread.getHandler(), R.id.quit);
+		Message quit = Message.obtain(decodeThread.getHandler(), QUIT);
 		quit.sendToTarget();
 		try {
 			// Wait at most half a second; should be enough time, and onPause()
@@ -96,14 +103,14 @@ public class CaptureActivityHandler extends Handler {
 		}
 
 		// Be absolutely sure we don't send any queued up messages
-		removeMessages(R.id.decode_succeeded);
-		removeMessages(R.id.decode_failed);
+		removeMessages(DECODE_SUCCEEDED);
+		removeMessages(DECODE_FAILED);
 	}
 
 	private void restartPreviewAndDecode() {
 		if (state == State.SUCCESS) {
 			state = State.PREVIEW;
-			cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+			cameraManager.requestPreviewFrame(decodeThread.getHandler(), DECODE);
 		}
 	}
 

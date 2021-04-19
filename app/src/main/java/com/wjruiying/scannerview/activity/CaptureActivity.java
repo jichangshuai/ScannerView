@@ -47,6 +47,8 @@ import com.wjruiying.scannerview.utils.InactivityTimer;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import static com.wjruiying.scannerview.Constant.RESTART_PREVIEW;
+
 /**
  * This activity opens the camera and does the actual scanning on a background
  * thread. It draws a viewfinder to help the user place the barcode correctly,
@@ -311,7 +313,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
 	public void restartPreviewAfterDelay(long delayMS) {
 		if (handler != null) {
-			handler.sendEmptyMessageDelayed(R.id.restart_preview, delayMS);
+			handler.sendEmptyMessageDelayed(RESTART_PREVIEW, delayMS);
 		}
 	}
 

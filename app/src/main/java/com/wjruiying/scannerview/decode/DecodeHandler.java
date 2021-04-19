@@ -37,6 +37,11 @@ import com.wjruiying.scannerview.activity.CaptureActivity;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
+import static com.wjruiying.scannerview.Constant.DECODE;
+import static com.wjruiying.scannerview.Constant.DECODE_FAILED;
+import static com.wjruiying.scannerview.Constant.DECODE_SUCCEEDED;
+import static com.wjruiying.scannerview.Constant.QUIT;
+
 public class DecodeHandler extends Handler {
 
 	private final CaptureActivity activity;
@@ -55,10 +60,10 @@ public class DecodeHandler extends Handler {
 			return;
 		}
 		switch (message.what) {
-		case R.id.decode:
+		case DECODE:
 			decode((byte[]) message.obj, message.arg1, message.arg2);
 			break;
-		case R.id.quit:
+		case QUIT:
 			running = false;
 			Looper.myLooper().quit();
 			break;
@@ -109,7 +114,7 @@ public class DecodeHandler extends Handler {
 		if (rawResult != null) {
 			// Don't log the barcode contents for security.
 			if (handler != null) {
-				Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
+				Message message = Message.obtain(handler, DECODE_SUCCEEDED, rawResult);
 				Bundle bundle = new Bundle();
 				bundleThumbnail(source, bundle);
 				message.setData(bundle);
@@ -117,7 +122,7 @@ public class DecodeHandler extends Handler {
 			}
 		} else {
 			if (handler != null) {
-				Message message = Message.obtain(handler, R.id.decode_failed);
+				Message message = Message.obtain(handler, DECODE_FAILED);
 				message.sendToTarget();
 			}
 		}
