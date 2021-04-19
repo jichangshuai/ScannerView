@@ -34,3 +34,4 @@
 #********************** Event Bus end *********************#
 
 -keep class com.wjruiying.scannerview.*{*;}
+-keep class com.wjruiying.scannerview.activity.CaptureActivity{*;}
