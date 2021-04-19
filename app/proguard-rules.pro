@@ -32,3 +32,5 @@
     <init>(java.lang.Throwable);
 }
 #********************** Event Bus end *********************#
+
+-keep class com.wjruiying.scannerview.*{*;}
