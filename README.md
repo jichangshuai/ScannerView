@@ -19,30 +19,30 @@ Step 1:
     
  Step 2:
  
-            private TextView button_view;
-            ...
-            public class MainActivity extends AppCompatActivity implements OnResultEventListener {
-            ...
-            @Override
-            protected void onCreate(Bundle savedInstanceState) {
-            button_view = findViewById(R.id.button_view);
-            button_view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(ContextCompat.checkSelfPermission(
-                                MainActivity.this,
-                                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
-                                Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
-                                startActivityForResult(intent, 100);
-                        }else{
-                            requestPermission();
-                        }
+        private TextView button_view;
+        ...
+        public class MainActivity extends AppCompatActivity implements OnResultEventListener {
+        ...
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+        button_view = findViewById(R.id.button_view);
+        button_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(ContextCompat.checkSelfPermission(
+                            MainActivity.this,
+                            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                            Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+                            startActivityForResult(intent, 100);
+                    }else{
+                        requestPermission();
                     }
-            });
-    
-            private void requestPermission(){
-                requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
-            }
+                }
+        });
+
+        private void requestPermission(){
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
+        }
     
         @Override
         public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
